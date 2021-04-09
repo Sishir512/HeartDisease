@@ -11,5 +11,9 @@ urlpatterns = [
     path('signout',views.signout , name='signout'),
     path('contact',views.contact , name='contact'),
     path('about',views.about , name='about'),
-    path('record' , views.record , name='record'),
+    path('record', views.record , name='record'),
+    path('prevention', views.prevention , name='prevention'),
+    path('doctorhospital', views.doctorhospital , name='doctorhospital'),
+    path('heartdetail',views.heartdetail,name='heartdetail'),
+    path('symptoms', views.symptoms, name='symptoms'),
 ]

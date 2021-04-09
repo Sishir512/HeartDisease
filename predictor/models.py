@@ -23,3 +23,14 @@ class HeartData(models.Model):
     date = models.DateField(auto_now_add=True)
     probability = models.FloatField(null=True)
 
+    def __str__(self):
+        return '{} {}'.format(self.owner , self.pk)
+
+class DoctorHospital(models.Model):
+    doctor_name = models.CharField(max_length=25)
+    hospital_name = models.CharField(max_length=25)
+    email = models.EmailField()
+    phone_no = models.IntegerField()
+    Location = models.CharField(max_length=25)
+
+    

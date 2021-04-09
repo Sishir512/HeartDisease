@@ -31,6 +31,8 @@
 
 <div class="con">
     <h5 > Here is the record of your previous Prediction of Heart Disease.  </h5>
+<br>
+    <a class="waves-effect waves-light btn-small black" href="{% url 'heartdetail' %}" target="_blank"><i class="material-icons left">privacy_tip</i>View Details</a> &nbsp; &nbsp;
 
      
 <br> <br> 
@@ -48,7 +50,7 @@
      <tbody>
        <tr>
             {% for data in record_data %}
-         <td>1.</td>
+         <td>{{ forloop.counter }}.</td>
          <td>{{ data.date }}</td>
          <td>{{ data.probability }}</td>
        </tr>

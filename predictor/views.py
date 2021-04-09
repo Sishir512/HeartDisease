@@ -13,7 +13,8 @@ from django.contrib.auth.models import User,auth
 from django.contrib.auth import authenticate,login 
 from django.contrib.auth.decorators import login_required
 from .forms import OwnerData
-from .models import HeartData
+from .models import HeartData,DoctorHospital
+from django.core.mail import send_mail
 # Create your views here.
 
 def quickpredict(request):
@@ -114,13 +115,41 @@ def index(request):
 
 def record(request):
     if request.user.is_authenticated:
-        record_data = HeartData.objects.filter(owner=request.user)
+        record_data = HeartData.objects.all()
         return render(request , 'record.html' , {'record_data':record_data})
     return redirect('/')
 
+def heartdetail(request):
+    if request.user.is_authenticated:
+        record_data = HeartData.objects.all()
+        return render(request , 'heartdetail.html' , {'record_data':record_data})
+    return redirect('/')
 
+def symptoms(request):
+    if request.user.is_authenticated:
+        record_data = HeartData.objects.all()
+        return render(request , 'symptoms.html')
+    return redirect('/')
+
+def prevention(request):
+    if request.user.is_authenticated:
+        return render(request , 'prevention.html')
+    return render('/')
+
+def doctorhospital(request):
+    if request.user.is_authenticated:
+        datas = DoctorHospital.objects.all()
+        return render(request , 'doctorshospitals.html',{'datas':datas})
+    return render('/')
 
 def contact(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        title = request.POST.get('title1')
+        message = request.POST.get('message')
+        
+        send_mail(title , message+'\n'+'From : '+name+'\n'+'Email : '+email ,from_email=email, recipient_list=['focusus1@gmail.com'])
     return render(request , 'contact.html')
 
 
