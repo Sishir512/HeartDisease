@@ -1,0 +1,71 @@
+{% extends 'base_layout2.html' %}
+{% block css %}
+<style> 
+    footer {
+        padding-left: 295px;
+    }
+    .con{
+        padding-left: 390px;
+        width: 90%;
+        flex: 1 0 auto;
+    }
+    @media only screen and (max-width : 992px) {
+      .con, footer {
+        padding-left: 0;
+      }
+    }
+
+    body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    }
+
+
+ </style>
+{% endblock %}
+{% block content %}
+
+
+
+
+<div class="con">
+    <h5 > Here is the record of your previous Prediction of Heart Disease.  </h5>
+
+     
+<br> <br> 
+
+
+    <table class="striped">
+     <thead>
+       <tr>
+           <th>S.No</th>
+           <th>Date</th>
+           <th>Probabilty</th>
+       </tr>
+     </thead>
+
+     <tbody>
+       <tr>
+            {% for data in record_data %}
+         <td>1.</td>
+         <td>{{ data.date }}</td>
+         <td>{{ data.probability }}</td>
+       </tr>
+            {% endfor %}
+       
+     </tbody>
+   </table>
+   <br>
+   <br>
+         
+
+
+   
+ </div> 
+
+
+
+
+
+{% endblock %}
