@@ -16,7 +16,3 @@ class Parameters(forms.Form):
     ca = forms.IntegerField(widget=forms.NumberInput(attrs={'id':'a12' , 'type':'text','class':'validate'}))
     thal= forms.IntegerField(widget=forms.NumberInput(attrs={'id':'a13' , 'type':'text','class':'validate'}))
     
-class OwnerData(forms.ModelForm):
-    class Meta:
-        model = HeartData
-        exclude = ['owner']

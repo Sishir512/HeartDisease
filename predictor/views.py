@@ -12,7 +12,6 @@ from django.contrib import messages
 from django.contrib.auth.models import User,auth
 from django.contrib.auth import authenticate,login 
 from django.contrib.auth.decorators import login_required
-from .forms import OwnerData
 from .models import HeartData,DoctorHospital
 from django.core.mail import send_mail
 # Create your views here.
