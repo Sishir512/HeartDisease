@@ -16,7 +16,7 @@ from .models import HeartData,DoctorHospital
 from django.core.mail import send_mail
 # Create your views here.
 
-def quickpredict(request):
+def quickpredict(request):  #Predicts the results after form is submitted.Works only if user is not authenticated
     
     if request.method=='POST':
 
@@ -40,14 +40,15 @@ def quickpredict(request):
             X,Y=regressor.find()
             #scaler = MinMaxScaler(feature_range=(0, 1)) 
             #X=scaler.fit_transform(X)
-            X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 1/3, random_state = 0 )
+            X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 1/3, random_state = 0 ) # Split the dataset into 70-30
             #model = LogitRegression(learning_rate=0.01 , iterations=1000)
-            model = LogitRegression(learning_rate=0.0001 , iterations=1000)
-            model.fit(X_train, Y_train)
+            model = LogitRegression(learning_rate=0.0001 , iterations=1000) # Passing learning_rate and iterations to LogitRegression class
+            model.fit(X_train, Y_train) # Fitting the model with training set
             output , output1 = model.predict(np.array([age,sex,cp,trestbps,chol,fbs,restcg,thalach,exang,oldpeak,slope,ca,thal]).reshape(1,-1))
             print('-----------------------------------------')
             print(output)
-            return render(request , 'output.html' , {'output':output , 'output1':output1})
+            output1=output1[0]
+            return render(request , 'output.html' , {'output1':output1})
         else:
             print('The form was not valid.')
             return redirect('/')
@@ -57,7 +58,7 @@ def quickpredict(request):
         form=Parameters()
         return render(request,'quickpredict.html',{'form':form})
 
-def index(request):
+def index(request): #Directs the user to home page . Different for authenticated and non authenticated users.
     if request.user.is_authenticated:
         if request.method=='POST':
     
@@ -85,8 +86,8 @@ def index(request):
                 model.fit(X_train, Y_train)
                 output , output1 = model.predict(np.array([age,sex,cp,trestbps,chol,fbs,restcg,thalach,exang,oldpeak,slope,ca,thal]).reshape(1,-1))
                 danger = 'high' if output == 1 else 'low'
-
-                saved_data = HeartData(age=age ,
+                output1=output1[0]
+                saved_data = HeartData(age=age ,  # Saving to database
                 sex = sex,
                 cp = cp,
                 trestbps = trestbps,
@@ -101,7 +102,7 @@ def index(request):
                 thal = thal,
                 owner = request.user,
                 probability = output1
-                )
+                )  #Saved the authenticated users data in the database.
                 saved_data.save()
                 return render(request , 'output2.html',{'output1':output1 , 'danger':danger})
 
@@ -112,48 +113,48 @@ def index(request):
 
 
 
-def record(request):
+def record(request): #Diplays previous record of authenticated user
     if request.user.is_authenticated:
-        record_data = HeartData.objects.all()
+        record_data = HeartData.objects.filter(owner = request.user) #Filter only those data whose owner is the logged in user
         return render(request , 'record.html' , {'record_data':record_data})
     return redirect('/')
 
-def heartdetail(request):
+def heartdetail(request): # Displays previous results in detail
     if request.user.is_authenticated:
-        record_data = HeartData.objects.all()
+        record_data = HeartData.objects.filter(owner = request.user)
         return render(request , 'heartdetail.html' , {'record_data':record_data})
     return redirect('/')
 
-def symptoms(request):
+def symptoms(request): # Diplays list of symptoms of heart disease
     if request.user.is_authenticated:
         record_data = HeartData.objects.all()
         return render(request , 'symptoms.html')
     return redirect('/')
 
-def prevention(request):
+def prevention(request): # Diplays list of prevention of heart disease
     if request.user.is_authenticated:
         return render(request , 'prevention.html')
     return render('/')
 
-def doctorhospital(request):
+def doctorhospital(request): # Displays list of doctors and hospitals for user
     if request.user.is_authenticated:
         datas = DoctorHospital.objects.all()
         return render(request , 'doctorshospitals.html',{'datas':datas})
     return render('/')
 
-def contact(request):
+def contact(request): #Diplays contact page . Sends email to HDPS using SMTP.
     if request.method == 'POST':
         name = request.POST.get('name')
         email = request.POST.get('email')
         title = request.POST.get('title1')
         message = request.POST.get('message')
         
-        send_mail(title , message+'\n'+'From : '+name+'\n'+'Email : '+email ,from_email=email, recipient_list=['focusus1@gmail.com'])
+        send_mail(title , message+'\n'+'From : '+name+'\n'+'Email : '+email ,from_email=email, recipient_list=['focusus1@gmail.com']) #Sends mail to HDPS
     return render(request , 'contact.html')
 
 
 
-def about(request):
+def about(request): #Displays about us page.
     return render(request , 'about.html')
 
 # Login and Logout
@@ -161,9 +162,8 @@ def about(request):
 
 
 
-# Create your views here.
 
-def signin(request):
+def signin(request): # For the user to sign in.
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -181,7 +181,7 @@ def signin(request):
         return render(request,'signin.html')
 
 
-def signup(request):
+def signup(request): #For the user to resister or sign up.
 
     if request.method == 'POST':
         first_name = request.POST['first_name']
@@ -209,7 +209,7 @@ def signup(request):
         return render(request,'signup.html')
 
 
-def signout(request):
+def signout(request): # In order to logout from the website
     auth.logout(request)
     return redirect('/')
 

@@ -50,6 +50,12 @@
 
         <div>
           <p>
+            {% if messages %}
+                {% for message in messages %}
+                  <p class="red-text">{{ message }}</p>
+                  <br>
+                {% endfor %}
+              {% endif %}
           <label>
             &nbsp;<input type="checkbox" />
             <span>Remember Me</span>
@@ -70,7 +76,7 @@
     </form>
     
 
-    <form action="" id="signup">
+    
   </div>     
 
 
