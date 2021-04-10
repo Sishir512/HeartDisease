@@ -76,8 +76,8 @@
             <img src="{% static 'img/about.png' %}">
           </div>
           <a href="#user"><img class="circle" src="{% static 'img/user.png' %}"></a>
-          <a href="#name"><span class="white-text name">User : Sraj </span></a>
-          <a href="#email"><span class="white-text email">srajdo@gmail.com</span></a>
+          <a href="#name"><span class="white-text name">User : {{ request.user.username }} </span></a>
+          <a href="#email"><span class="white-text email">{{ request.user.email }}</span></a>
         </div></li> 
         <br> 
 
